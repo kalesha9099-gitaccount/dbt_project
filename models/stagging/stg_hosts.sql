@@ -1,0 +1,1 @@
+SELECT * FROM airbnb.raw.raw_hosts
