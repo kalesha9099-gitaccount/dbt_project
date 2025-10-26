@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Welcome to your new dbt project!
 
 ### Using the starter project
@@ -14,3 +15,6 @@ Try running the following commands:
 - Find [dbt events](https://events.getdbt.com) near you
 - Check out [the blog](https://blog.getdbt.com/) for the latest news on dbt's development and best practices
 "# dbt_project" 
+=======
+# dbt_project_n
+>>>>>>> 50aa75c3098e709c5d95af564954a5250254cb48
