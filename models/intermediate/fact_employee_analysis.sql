@@ -20,14 +20,11 @@ WITH base_join AS (
         e.salary,
         e.hire_date, -- Required for incremental filter
 
-        -- keep commission_pct numeric and replace NULLs with 0 for output
-        COALESCE(e.commission_pct, 0)::double precision AS commission_pct,
-
         -- separate text hash to mark rows that originally had NULL commission_pct
         CASE
           WHEN e.commission_pct IS NULL THEN md5(e.employee_id::text)
-          ELSE NULL
-        END AS commission_pct_hash,
+          ELSE e.commission_pct
+        END AS commission_pct,
 
         d.department_name,
         d.department_id,
@@ -80,9 +77,8 @@ WHERE department_id between 60 and 90
 
 -- DBT Incremental Logic: Only process rows where hire_date is newer than the latest date 
 -- already in the target table (this). Detect whether commission_pct_hash exists on the target
-{% set _cols = adapter.get_columns_in_relation(this) %}
-{% set _col_names = _cols | map(attribute='name') | list %}
-{% set has_hash = 'commission_pct_hash' in _col_names %}
+
+
 
 {% if is_incremental() %}
    AND (
@@ -91,12 +87,8 @@ WHERE department_id between 60 and 90
       SELECT 1
       FROM {{ this }} t
       WHERE t.employee_id = employee_id
-         AND (
+         AND 
            t.commission_pct IS NULL
-           {% if has_hash %}
-             OR t.commission_pct_hash IS NULL
-           {% endif %}
-         )
     )
   )
 {% endif %}

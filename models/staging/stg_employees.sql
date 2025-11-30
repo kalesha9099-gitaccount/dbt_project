@@ -13,7 +13,7 @@ select
     hire_date,
     job_id,
     salary,
-    commission_pct,
+    cast(commission_pct as text) as commission_pct,
     manager_id,
     department_id
 
