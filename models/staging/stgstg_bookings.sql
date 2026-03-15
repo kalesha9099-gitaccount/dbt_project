@@ -10,5 +10,6 @@ select
     guest_id,
     checkin_date,
     checkout_date,
-    total_amount
+    total_amount,
+    checkout_date - checkin_date as nights_stayed
 from {{ ref('bookings') }}
